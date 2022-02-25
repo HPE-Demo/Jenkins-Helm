@@ -28,6 +28,7 @@
 8. Create value.yaml
 
 9. Helm Install
+
 `helm repo add bitnami https://charts.bitnami.com/bitnami`
 
 `helm install jenkins --set jenkinsPassword=bct1234 bitnami/jenkins -n jenkins -f value.yaml`
