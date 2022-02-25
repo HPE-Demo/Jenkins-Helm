@@ -56,3 +56,12 @@
 `kubectl get httpproxy -n jenkins`
 
 `kubectl describe httpproxy jenkins-web -n jenkins`
+
+# Global Settings
+1. Install RBAC Plugin
+
+2. Enable LDAP
+
+3. Create Global Role
+
+4. Assign Global Role
