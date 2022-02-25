@@ -35,7 +35,7 @@ commonLabels: {}
 commonAnnotations: {}
 ## @param clusterDomain Kubernetes cluster domain name
 ##
-clusterDomain: cluster.local
+clusterDomain: ad01.bcthk.com
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
