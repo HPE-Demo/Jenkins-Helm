@@ -488,10 +488,10 @@ persistence:
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  storageClass: "bct-tanzu-sp-dr"
+  storageClass: ""
   ## @param persistence.existingClaim Use a existing PVC which must be created manually before bound
   ##
-  existingClaim: ""
+  existingClaim: "jenkins-pvc"
   ## @param persistence.annotations Additional custom annotations for the PVC
   ##
   annotations: {}
