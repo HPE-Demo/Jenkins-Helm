@@ -25,15 +25,21 @@
 
 `kubectl apply -f rolebinding.yaml -n jenkins`
 
-8. Create value.yaml
+8. Create ConfigMap
 
-9. Helm Install
+`kubectl -n jenkins create configmap ad-cert --from-file=bctad01.cer`
+
+`kubectl -n jenkins create configmap gitlab-cert --from-file=gitlab.cer`
+
+9. Create value.yaml
+
+10. Helm Install
 
 `helm repo add bitnami https://charts.bitnami.com/bitnami`
 
 `helm install jenkins --set jenkinsPassword=bct1234 bitnami/jenkins -n jenkins -f value.yaml`
 
-10. Verifications
+11. Verifications
 
 `kubectl get pod -n jenkins`
 
@@ -47,9 +53,9 @@
 
 `kubectl get rolebinding -n jenkins`
 
-11. Create httpproxy.yaml
+12. Create httpproxy.yaml
 
-12. Create HTTPProxy
+13. Create HTTPProxy
 
 `kubectl apply -f httpproxy.yaml -n jenkins`
 
