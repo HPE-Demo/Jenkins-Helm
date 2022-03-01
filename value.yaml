@@ -105,7 +105,7 @@ jenkinsHost: ""
 jenkinsHome: /bitnami/jenkins/home
 ## @param javaOpts Custom JVM parameters
 ##
-javaOpts: []
+javaOpts: ["-Djavax.net.ssl.trustStore=/bitnami/jenkins/home/cacerts -Djavax.net.ssl.trustStorePassword=changeit"]
 ## @param disableInitialization Skip performing the initial bootstrapping for Jenkins
 ##
 disableInitialization: "no"
@@ -215,7 +215,7 @@ lifecycleHooks: |-
       command:
       - "sh"
       - "-c"
-      - "keytool -import -alias bctad01 -keystore /opt/bitnami/java/jre/lib/security/cacerts -file /bitnami/jenkins/home/ad-cert/bctad01.cer -noprompt -storepass changeit && keytool -import -alias gitlab -keystore /opt/bitnami/java/jre/lib/security/cacerts -file /bitnami/jenkins/home/gitlab-cert/gitlab.cer -noprompt -storepass changeit && git config --global http.sslCAInfo /bitnami/jenkins/home/gitlab-cert/gitlab.cer"
+      - "rm -f /bitnami/jenkins/home/cacerts && cp /opt/bitnami/java/lib/security/cacerts /bitnami/jenkins/home/. && keytool -import -alias bctad01 -keystore /bitnami/jenkins/home/cacerts -file /bitnami/jenkins/home/ad-cert/bctad01.cer -noprompt -storepass changeit && keytool -import -alias gitlab -keystore /opt/bitnami/java/jre/lib/security/cacerts -file /bitnami/jenkins/home/gitlab-cert/gitlab.cer -noprompt -storepass changeit && git config --global http.sslCAInfo /bitnami/jenkins/home/gitlab-cert/gitlab.cer"
 
 ## @param podLabels Extra labels for Jenkins pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
