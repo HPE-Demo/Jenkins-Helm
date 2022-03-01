@@ -142,7 +142,7 @@ extraEnvVarsSecret: ""
 ##    maxUnavailable: 25%
 ##
 updateStrategy:
-  type: RollingUpdate
+  type: Recreate
 
 ## @param serviceAccountName Jenkins pod service account name
 ##
@@ -166,10 +166,24 @@ topologySpreadConstraints: []
 hostAliases: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for Jenkins pods
 ##
-extraVolumes: []
+extraVolumes: |-
+  - name: ad-cert-volume
+    configMap:
+      name: ad-cert
+  - name: gitlab-cert-volume
+    configMap:
+      name: gitlab-cert
+
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Jenkins container(s)
 ##
-extraVolumeMounts: []
+extraVolumeMounts: |-
+  - name: ad-cert-volume
+    mountPath: /bitnami/jenkins/home/ad-cert
+    readOnly: true
+  - name: gitlab-cert-volume
+    mountPath: /bitnami/jenkins/home/gitlab-cert
+    readOnly: true    
+
 ## @param sidecars Add additional sidecar containers to the Jenkins pod
 ## e.g:
 ## sidecars:
@@ -195,7 +209,14 @@ sidecars: []
 initContainers: []
 ## @param lifecycleHooks Add lifecycle hooks to the Jenkins deployment
 ##
-lifecycleHooks: {}
+lifecycleHooks: |-
+  postStart:
+    exec:
+      command:
+      - "sh"
+      - "-c"
+      - "keytool -import -alias bctad01 -keystore /opt/bitnami/java/jre/lib/security/cacerts -file /bitnami/jenkins/home/ad-cert/bctad01.cer -noprompt -storepass changeit && keytool -import -alias gitlab -keystore /opt/bitnami/java/jre/lib/security/cacerts -file /bitnami/jenkins/home/gitlab-cert/gitlab.cer -noprompt -storepass changeit && git config --global http.sslCAInfo /bitnami/jenkins/home/gitlab-cert/gitlab.cer"
+
 ## @param podLabels Extra labels for Jenkins pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -488,7 +509,7 @@ persistence:
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
-  storageClass: ""
+  ##storageClass: ""
   ## @param persistence.existingClaim Use a existing PVC which must be created manually before bound
   ##
   existingClaim: "jenkins-pvc"
